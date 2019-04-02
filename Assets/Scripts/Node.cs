@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class Node
 {
 	public int gridX, gridY;
 	public int distToStart; // G cost
-	public int distToEnd;   // H cost
-	public int TotalCost { get { return distToStart + distToEnd; } } // F cost
+	public int distToGoal;   // H cost
+	public int TotalCost { get { return distToStart + distToGoal; } } // F cost
 
 	public bool isWall;
 	public Vector3 pos;
