@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
+// Contains info for a* pathfinding
 public class Node
 {
 	public int gridX, gridY;

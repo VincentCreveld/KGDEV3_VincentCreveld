@@ -15,7 +15,8 @@ public class Pathfinding : MonoBehaviour
 		FindPath(startPos.position, targetPos.position);
 	}
 
-	private void FindPath(Vector3 startPos, Vector3 targetPos)
+	// Access function for agent.
+	public void FindPath(Vector3 startPos, Vector3 targetPos)
 	{
 		Node startNode = grid.GetNodeFromWorldPos(startPos);
 		Node targetNode = grid.GetNodeFromWorldPos(targetPos);
@@ -80,7 +81,7 @@ public class Pathfinding : MonoBehaviour
 
 		finalPath.Reverse();
 
-		grid.FinalPath = finalPath;
+		grid.finalPath = finalPath;
 	}
 
 	private int GetManhattenDist(Node startNode, Node targetNode)

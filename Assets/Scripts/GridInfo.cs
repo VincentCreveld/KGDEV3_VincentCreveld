@@ -3,34 +3,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This class has all the info the A* needs to function.
+// Contains the dungeon grid info
 public class GridInfo : MonoBehaviour
 {
-	public Transform StartPos;
-	public LayerMask WallMask;
+	public Transform startPos;
+	public LayerMask wallMask;
 	public Vector2 gridWorldSize;
 
 	public float nodeRadius;
 	public float distance;
 
 	private Node[,] grid;
-	public List<Node> FinalPath;
+	public List<Node> finalPath;
 
 	private float nodeDiameter;
 	private int gridSizeX, gridSizeY;
 
-
+	public DungeonGrid dungeonGrid;
 
 	private void Start()
 	{
 		nodeDiameter = nodeRadius * 2;
-		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
-		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
+		gridSizeX = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().min / nodeDiameter);
+		gridSizeY = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().max / nodeDiameter);
 		ConstructGrid();
 	}
 
-	// Grid generation fro tutorial, not needed as i have my own maze generation
-	private void ConstructGrid()
+	private void Update()
 	{
+		if(Input.GetKeyDown("space"))
+		{
+			ConstructGrid();
+			PlaceStart();
+		}
+	}
+
+	public void ConstructGrid()
+	{
+		if(dungeonGrid == null)
+			return;
+
+		dungeonGrid.GenerateDungeon();
+
+		Tile[,] dGrid = dungeonGrid.GetDungeonGrid();
 		grid = new Node[gridSizeX, gridSizeY];
 		Vector3 bottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
 
@@ -40,12 +56,12 @@ public class GridInfo : MonoBehaviour
 			{
 				float xStep = (x * nodeDiameter + nodeRadius);
 				float yStep = (y * nodeDiameter + nodeRadius);
-				Vector3 worldPoint = bottomLeft + Vector3.right * xStep + Vector3.forward * yStep;
+				Vector3 worldPoint = (bottomLeft + Vector3.right * xStep + Vector3.forward * yStep) * 2;
 
-				bool isWall = true;
+				bool isWall = false;
 
-				if(Physics.CheckSphere(worldPoint, nodeRadius, WallMask))
-					isWall = false;
+				if(dGrid[x, y] == Tile.path || dGrid[x, y] == Tile.room)
+					isWall = true;
 
 				grid[x, y] = new Node(isWall, worldPoint, x, y);
 
@@ -74,7 +90,7 @@ public class GridInfo : MonoBehaviour
 
 				// Check if neighbor is not over grid boundary
 				if(xCheck >= 0 && xCheck < gridSizeX && yCheck >= 0 && yCheck < gridSizeY)
-					neighbors.Add(grid[xCheck,yCheck]);
+					neighbors.Add(grid[xCheck, yCheck]);
 			}
 		}
 
@@ -90,29 +106,44 @@ public class GridInfo : MonoBehaviour
 		int y = Mathf.RoundToInt((gridSizeY - 1) * yPoint);
 
 		return grid[x, y];
-
 	}
 
+	// In editor visualisation of the dungoen and path. Not visible at runtime
 	private void OnDrawGizmos()
 	{
-		Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+		Gizmos.DrawWireCube(new Vector3(((gridWorldSize.x - 1) / 2), 0, ((gridWorldSize.x - 1) / 2)) + dungeonGrid.dungeonParent.transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
 		if(grid != null)
 		{
 			foreach(Node node in grid)
 			{
+				float size = 0.4f;
 				if(node.isWall)
 					Gizmos.color = Color.white;
 				else
 					Gizmos.color = Color.red;
 
-				if(FinalPath != null)
-					if(FinalPath.Contains(node))
+				if(finalPath != null)
+					if(finalPath.Contains(node))
+					{
 						Gizmos.color = Color.blue;
+						size = 0.8f;
+					}
 
-				Gizmos.DrawCube(node.pos, Vector3.one * (nodeDiameter - distance));
+				Vector3 pos = new Vector3(-(gridWorldSize.x - 2), 0, -(gridWorldSize.y - 2)) + (node.pos);
+
+				Gizmos.DrawCube(((node.pos - new Vector3(1,0,1)) * 0.5f), Vector3.one * (nodeDiameter - distance) * size);
 			}
 
 		}
+	}
+
+	public void PlaceStart()
+	{
+		Room r1 = dungeonGrid.startRoom;
+		int x = r1.xPos + Mathf.RoundToInt(r1.xSize / 2);
+		int y = r1.yPos + Mathf.RoundToInt(r1.ySize / 2);
+
+		startPos.transform.position = (new Vector3((-(gridWorldSize.x-1)/2) + x, 0, (-(gridWorldSize.x - 1) / 2) + y));
 	}
 }
