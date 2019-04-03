@@ -9,6 +9,7 @@ public class Pathfinding : MonoBehaviour
 
 	public Transform startPos, targetPos;
 
+	public List<Node> path;
 
 	private void Update()
 	{
@@ -81,7 +82,10 @@ public class Pathfinding : MonoBehaviour
 
 		finalPath.Reverse();
 
+		// For gizmo purposes
 		grid.finalPath = finalPath;
+
+		path = finalPath;
 	}
 
 	private int GetManhattenDist(Node startNode, Node targetNode)

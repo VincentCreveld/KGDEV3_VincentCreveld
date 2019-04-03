@@ -25,8 +25,8 @@ public class GridInfo : MonoBehaviour
 	private void Start()
 	{
 		nodeDiameter = nodeRadius * 2;
-		gridSizeX = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().min / nodeDiameter);
-		gridSizeY = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().max / nodeDiameter);
+		gridSizeX = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().min);
+		gridSizeY = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().max);
 		ConstructGrid();
 	}
 
