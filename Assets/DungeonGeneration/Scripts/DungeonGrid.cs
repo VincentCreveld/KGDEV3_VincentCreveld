@@ -61,8 +61,7 @@ public class DungeonGrid : MonoBehaviour
 	public Room startRoom { get { return roomList[0]; } }
 	public Room endRoom { get { return roomList[roomList.Count-1]; } }
 
-	//This function is the main function that generated the dungeon.
-	[ContextMenu("Generate Dungeon")]
+	//This function is the main function that generates the dungeon.
 	public void GenerateDungeon()
 	{
 		dungeonGrid = new Tile[DUNGEON_SIZE, DUNGEON_SIZE];

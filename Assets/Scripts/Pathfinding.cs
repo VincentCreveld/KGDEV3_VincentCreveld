@@ -11,10 +11,10 @@ public class Pathfinding : MonoBehaviour
 
 	public List<Node> path;
 
-	private void Update()
-	{
-		FindPath(startPos.position, targetPos.position);
-	}
+	//private void Update()
+	//{
+	//	FindPath(startPos.position, targetPos.position);
+	//}
 
 	// Access function for agent.
 	public void FindPath(Vector3 startPos, Vector3 targetPos)
@@ -67,6 +67,11 @@ public class Pathfinding : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public List<Node> GetPath()
+	{
+		return path;
 	}
 
 	private void GetFinalPath(Node startNode, Node targetNode)

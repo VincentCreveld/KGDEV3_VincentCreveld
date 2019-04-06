@@ -6,9 +6,12 @@ public class SequenceNode : BaseNode
 {
 	private List<BaseNode> connectedNodes = new List<BaseNode>();
 
-	public SequenceNode(List<BaseNode> nodes)
+	public SequenceNode(params BaseNode[] nodes)
 	{
-		connectedNodes = nodes;
+		foreach(BaseNode node in nodes)
+		{
+			connectedNodes.Add(node);
+		}
 	}
 
 	public override BTNodeState Evaluate()

@@ -6,9 +6,12 @@ public class SelectorNode : BaseNode
 {
 	private List<BaseNode> connectedNodes = new List<BaseNode>();
 
-	public SelectorNode (List<BaseNode> nodes)
+	public SelectorNode(params BaseNode[] nodes)
 	{
-		connectedNodes = nodes;
+		foreach(BaseNode node in nodes)
+		{
+			connectedNodes.Add(node);
+		}
 	}
 
 	public override BTNodeState Evaluate()

@@ -56,14 +56,14 @@ public class GridInfo : MonoBehaviour
 			{
 				float xStep = (x * nodeDiameter + nodeRadius);
 				float yStep = (y * nodeDiameter + nodeRadius);
-				Vector3 worldPoint = (bottomLeft + Vector3.right * xStep + Vector3.forward * yStep) * 2;
+				Vector3 worldPoint = (bottomLeft + Vector3.right * xStep + Vector3.forward * yStep);
 
-				bool isWall = false;
+				bool isWalkable = false;
 
 				if(dGrid[x, y] == Tile.path || dGrid[x, y] == Tile.room)
-					isWall = true;
+					isWalkable = true;
 
-				grid[x, y] = new Node(isWall, worldPoint, x, y);
+				grid[x, y] = new Node(isWalkable, worldPoint, x, y);
 
 			}
 		}
@@ -111,6 +111,9 @@ public class GridInfo : MonoBehaviour
 	// In editor visualisation of the dungoen and path. Not visible at runtime
 	private void OnDrawGizmos()
 	{
+		if(dungeonGrid.dungeonParent == null)
+			return;
+
 		Gizmos.DrawWireCube(new Vector3(((gridWorldSize.x - 1) / 2), 0, ((gridWorldSize.x - 1) / 2)) + dungeonGrid.dungeonParent.transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
 		if(grid != null)
@@ -132,7 +135,7 @@ public class GridInfo : MonoBehaviour
 
 				Vector3 pos = new Vector3(-(gridWorldSize.x - 2), 0, -(gridWorldSize.y - 2)) + (node.pos);
 
-				Gizmos.DrawCube(((node.pos - new Vector3(1,0,1)) * 0.5f), Vector3.one * (nodeDiameter - distance) * size);
+				Gizmos.DrawCube(((node.pos * 2 - new Vector3(1,0,1)) * 0.5f), Vector3.one * (nodeDiameter - distance) * size);
 			}
 
 		}
@@ -144,6 +147,6 @@ public class GridInfo : MonoBehaviour
 		int x = r1.xPos + Mathf.RoundToInt(r1.xSize / 2);
 		int y = r1.yPos + Mathf.RoundToInt(r1.ySize / 2);
 
-		startPos.transform.position = (new Vector3((-(gridWorldSize.x-1)/2) + x, 0, (-(gridWorldSize.x - 1) / 2) + y));
+		startPos.transform.position = (new Vector3((-(gridWorldSize.x-1)/2) + x, 4, (-(gridWorldSize.x - 1) / 2) + y));
 	}
 }

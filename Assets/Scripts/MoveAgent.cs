@@ -39,6 +39,9 @@ public class MoveAgent : MonoBehaviour
 
 		for(int i = 1; i < path.Count; i++)
 		{
+			pathfindingComponent.FindPath(transform.position, targetPos.position);
+			path = pathfindingComponent.path;
+
 			previousNode = (path[i - 1].pos - new Vector3(0.5f,0,0.5f)) * 0.5f;
 			nextNode = (path[i].pos - new Vector3(0.5f, 0, 0.5f)) * 0.5f;
 			yield return StartCoroutine(MoveToNextNode(previousNode, nextNode));
@@ -59,13 +62,13 @@ public class MoveAgent : MonoBehaviour
 			yield return null;
 			curTime += Time.deltaTime * moveSpeed;
 
-			// Makes agent look at movement direction
-			Vector3 targetDir = startPos - endPos;
-			float step = 10 * Time.deltaTime;
-			Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
-			transform.rotation = Quaternion.LookRotation(newDir);
+			//// Makes agent look at movement direction
+			//Vector3 targetDir = startPos - endPos;
+			//float step = 10 * Time.deltaTime;
+			//Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0f);
+			//transform.rotation = Quaternion.LookRotation(newDir);
 
-			transform.position = Vector3.Lerp(startPos, endPos, curTime / distToNextNode);
+			transform.position = Vector3.MoveTowards(startPos, endPos, curTime / distToNextNode);
 
 			if(curTime >= distToNextNode)
 				break;
