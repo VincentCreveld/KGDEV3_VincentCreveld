@@ -58,6 +58,11 @@ public class DungeonGrid : MonoBehaviour
 		return new IntVector2(DUNGEON_SIZE, DUNGEON_SIZE);
 	}
 
+	public List<Room> GetRooms()
+	{
+		return roomList;
+	}
+
 	public Room startRoom { get { return roomList[0]; } }
 	public Room endRoom { get { return roomList[roomList.Count-1]; } }
 
@@ -369,7 +374,7 @@ public class DungeonGrid : MonoBehaviour
 		return temp == r2 ? true : GeneratePath(temp, r2);
 	}
 
-	private Room GetRoomByCoords(int x, int y)
+	public Room GetRoomByCoords(int x, int y)
 	{
 		foreach(Room r in roomList)
 		{
@@ -379,6 +384,17 @@ public class DungeonGrid : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	public int GetRoomNumber(Room r)
+	{
+		for(int i = 0; i < roomList.Count; i++)
+		{
+			if(r == roomList[i])
+				return i;
+		}
+
+		return 0;
 	}
 
 	private void GenerateWalls()

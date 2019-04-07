@@ -10,14 +10,7 @@ public class BTLeaf_CheckForPlayerLowHP : BaseNode
 	public BTLeaf_CheckForPlayerLowHP(Blackboard bb)
 	{
 		blackboard = bb;
-		if(!bb.DoesBlackboardContain(Blackboard.PLAYER_CURHEALTH))
-		{
-			bb.SetValueOnBlackboard(Blackboard.PLAYER_CURHEALTH, Blackboard.PLAYER_MAX_HEALTH);
-		}
-		else
-		{
-			bb.SetValueOnBlackboard(Blackboard.PLAYER_CURHEALTH, Blackboard.PLAYER_MAX_HEALTH);
-		}
+		blackboard.SetValueOnBlackboard(Blackboard.PLAYER_CURHEALTH, Blackboard.PLAYER_MAX_HEALTH);
 	}
 
 	// Update func

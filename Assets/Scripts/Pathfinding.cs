@@ -74,6 +74,46 @@ public class Pathfinding : MonoBehaviour
 		return path;
 	}
 
+	public int GetClosestRoom(Vector3 pos)
+	{
+		int closestNo = 0;
+		float closestDist = 10000000f;
+
+		for(int i = 0; i < grid.roomCenters.Count; i++)
+		{
+			if(Vector3.Distance(pos, grid.roomCenters[i]) < closestDist)
+			{
+				closestDist = Vector3.Distance(pos, grid.roomCenters[i]);
+				closestNo = i;
+			}
+		}
+		return closestNo;
+	}
+
+	public int GetFurthestRoom(Vector3 pos)
+	{
+		int furthestNo = 0;
+		float furthestDist = 0f;
+
+		for(int i = 0; i < grid.roomCenters.Count; i++)
+		{
+			if(Vector3.Distance(pos, grid.roomCenters[i]) > furthestDist)
+			{
+				furthestDist = Vector3.Distance(pos, grid.roomCenters[i]);
+				furthestNo = i;
+			}
+		}
+		return furthestNo;
+	}
+
+	public Vector3 GetRoomCenter(int i)
+	{
+		if(i < grid.roomCenters.Count)
+			return grid.roomCenters[i];
+		else
+			return grid.roomCenters[0];
+	}
+
 	private void GetFinalPath(Node startNode, Node targetNode)
 	{
 		List<Node> finalPath = new List<Node>();

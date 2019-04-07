@@ -16,11 +16,14 @@ public class GridInfo : MonoBehaviour
 
 	private Node[,] grid;
 	public List<Node> finalPath;
+	public List<Vector3> roomCenters;
 
 	private float nodeDiameter;
 	private int gridSizeX, gridSizeY;
 
 	public DungeonGrid dungeonGrid;
+
+	public List<EnemyController> enemies;
 
 	private void Start()
 	{
@@ -28,16 +31,25 @@ public class GridInfo : MonoBehaviour
 		gridSizeX = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().min);
 		gridSizeY = Mathf.RoundToInt(dungeonGrid.GetDungeonSize().max);
 		ConstructGrid();
+		PlaceStart();
+		PlaceEnemiesInRooms();
 	}
 
-	private void Update()
+	public void GetRooms()
 	{
-		if(Input.GetKeyDown("space"))
+		List<Room> rooms = dungeonGrid.GetRooms();
+		roomCenters = new List<Vector3>();
+
+		foreach(Room r in rooms)
 		{
-			ConstructGrid();
-			PlaceStart();
+			int x = r.xPos + Mathf.RoundToInt(r.xSize / 2);
+			int y = r.yPos + Mathf.RoundToInt(r.ySize / 2);
+			Vector3 center = new Vector3(x - 32, 0, y - 32);
+
+			roomCenters.Add(center);
 		}
 	}
+
 
 	public void ConstructGrid()
 	{
@@ -67,6 +79,8 @@ public class GridInfo : MonoBehaviour
 
 			}
 		}
+
+		GetRooms();
 	}
 
 	public List<Node> GetNeighbors(Node node)
@@ -77,6 +91,7 @@ public class GridInfo : MonoBehaviour
 		int yCheck;
 
 		// Checking all 8 neighbors.
+		// This allows diagonal movement.
 		for(int x = -1; x <= 1; x++)
 		{
 			for(int y = -1; y <= 1; y++)
@@ -148,5 +163,15 @@ public class GridInfo : MonoBehaviour
 		int y = r1.yPos + Mathf.RoundToInt(r1.ySize / 2);
 
 		startPos.transform.position = (new Vector3((-(gridWorldSize.x-1)/2) + x, 4, (-(gridWorldSize.x - 1) / 2) + y));
+	}
+
+	public void PlaceEnemiesInRooms()
+	{
+		foreach(EnemyController enemy in enemies)
+		{
+			enemy.transform.position = roomCenters[UnityEngine.Random.Range(0, roomCenters.Count)];
+
+			enemy.Initialise();
+		}
 	}
 }

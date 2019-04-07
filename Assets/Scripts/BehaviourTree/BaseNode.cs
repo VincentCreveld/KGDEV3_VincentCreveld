@@ -15,8 +15,6 @@ public abstract class BaseNode
 	// ctor
 	public BaseNode() { }
 
-	protected Blackboard blackboard;
-
 	// init -> geef blackboard mee
 
 	// Overwritten function that tests the node conditions (update / tick)

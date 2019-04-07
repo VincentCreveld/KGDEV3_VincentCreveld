@@ -7,20 +7,32 @@ public class Blackboard
 	// static strings in blackboard class to prevent typo's in strings down the line
 	public static string PLAYER_OBJ = "p_obj";
 	public static string VISION_RANGE = "v_range";
-	
-	public static string DAMAGE = "e_dmg";
+
 	public static string PLAYER_CURHEALTH = "p_health";
-	public static string HIGH_ALERT = "p_alert";
 	public static float PLAYER_MAX_HEALTH = 100;
 	public static float PLAYER_LOW_HEALTH_THRESHOLD = 35;
+
+	public static string ENEMY_CURHEALTH = "e_health";
+	public static float ENEMY_MAX_HEALTH = 50f;
+	public static float ENEMY_LOW_HEALTH_THRESHOLD = 15f;
+
 	public static string PATHFINDING_COMP = "e_pathfindingComp";
+
+	public static string ENEMY_ROOM_TO_SENTRY = "e_sentryRoom";
 
 	public static string ENEMY_ATTACK_RANGE = "e_attackRange";
 	public static float E_ATTACK_RANGE = 1.5f;
+	public static float E_FLEE_RANGE = 20f;
 	public static string MOVESPEED = "e_speed";
-	public static float E_MOVESPEED = .002f;
+	public static float E_MOVESPEED = .1f;
+	public static string DAMAGE = "e_dmg";
+	public static float E_DAMAGE = 10f;
 
 	public static string OWN_ENEMY_OBJECT = "e_object";
+
+	public static string CURRENT_TARGET = "e_curTarget";
+
+	public static string CURRENT_PATROL_NODE = "e_curPatrolNode";
 
 	private Dictionary<string, object> blackboard;
 
@@ -77,7 +89,7 @@ public class Blackboard
 
 	public Vector3 GetNextMovementPos()
 	{
-		if(path.Count <= 0)
+		if(path.Count <= 1)
 			return GetCurrentAgent().GetPos();
 		else
 			return path[1].pos;

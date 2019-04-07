@@ -19,12 +19,10 @@ public class BTLeaf_SetPathfindingTarget : BaseNode
 
 	private void SetMovementTargetToPlayer()
 	{
-		Debug.Log("Setting new pathfinding target to " + blackboard.GetCurrentPlayer().GetPos());
-
 		blackboard.GetObjectFromBlackBoard<Pathfinding>(Blackboard.PATHFINDING_COMP).
 			FindPath(
 			blackboard.GetCurrentAgent().GetPos(),
-			blackboard.GetCurrentPlayer().GetPos()
+			blackboard.GetObjectFromBlackBoard<Vector3>(Blackboard.CURRENT_TARGET)
 			);
 
 		blackboard.path = blackboard.GetObjectFromBlackBoard<Pathfinding>(Blackboard.PATHFINDING_COMP).GetPath();

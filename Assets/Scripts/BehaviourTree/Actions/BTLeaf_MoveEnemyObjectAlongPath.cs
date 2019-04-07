@@ -10,8 +10,8 @@ public class BTLeaf_MoveEnemyObjectAlongPath : BaseNode
 	{
 		blackboard = bb;
 
-		bb.SetValueOnBlackboard(Blackboard.ENEMY_ATTACK_RANGE, Blackboard.E_ATTACK_RANGE);
-		bb.SetValueOnBlackboard(Blackboard.MOVESPEED, Blackboard.E_MOVESPEED);
+		blackboard.SetValueOnBlackboard(Blackboard.ENEMY_ATTACK_RANGE, Blackboard.E_ATTACK_RANGE);
+		blackboard.SetValueOnBlackboard(Blackboard.MOVESPEED, Blackboard.E_MOVESPEED);
 	}
 
 	public override BTNodeState Evaluate()
@@ -32,6 +32,10 @@ public class BTLeaf_MoveEnemyObjectAlongPath : BaseNode
 	{
 		blackboard.GetCurrentAgent().transform.position =
 		Vector3.MoveTowards(blackboard.GetCurrentAgent().transform.localPosition,
-		blackboard.GetNextMovementPos(), 0.2f);
+		blackboard.GetNextMovementPos(), blackboard.GetObjectFromBlackBoard<float>(Blackboard.MOVESPEED));
+
+		Vector3 lookPos = blackboard.GetNextMovementPos() + new Vector3(0, 1, 0);
+
+		blackboard.GetCurrentAgent().LookatGraphics(lookPos);
 	}
 }
