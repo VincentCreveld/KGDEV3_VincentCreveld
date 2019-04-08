@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public interface IDamagable
 {
@@ -15,6 +14,8 @@ public class PlayerController : GameEntity, IDamagable, IHealable
 	private bool isDamagable = true;
 
 	public LayerMask shootingMask;
+
+	public Text hp;
 
 	public float maxHealth = 100f;
 	private float currentHealth;
@@ -42,6 +43,8 @@ public class PlayerController : GameEntity, IDamagable, IHealable
 
 	public void Update()
 	{
+		hp.text = "HP: " + (int)currentHealth;
+
 		if(Input.GetKeyDown(KeyCode.R))
 		{
 			CurrentHealth -= 10f;

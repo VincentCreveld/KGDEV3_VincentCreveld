@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // This class has all the info the A* needs to function.
 // Contains the dungeon grid info
@@ -27,6 +28,9 @@ public class LevelManager : MonoBehaviour
 
 	public List<Healthpack> healthpacks;
 
+	public GameObject endGameText;
+	private bool gameEnded = false;
+
 	private void Start()
 	{
 		nodeDiameter = nodeRadius * 2;
@@ -36,6 +40,30 @@ public class LevelManager : MonoBehaviour
 		PlaceStart();
 		PlaceHealthpacksInRooms();
 		PlaceEnemiesInRooms();
+	}
+
+	private void Update()
+	{
+		if(!gameEnded)
+			CheckEnd();	
+	}
+
+	private void CheckEnd()
+	{
+		foreach(EnemyController e in enemies)
+		{
+			if(e != null)
+				return;
+		}
+		StartCoroutine(EndSequence());
+	}
+
+	private IEnumerator EndSequence()
+	{
+		gameEnded = true;
+		endGameText.SetActive(true);
+		yield return new WaitForSeconds(3);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	public void GetRooms()

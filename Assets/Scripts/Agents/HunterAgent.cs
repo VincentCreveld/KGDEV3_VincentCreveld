@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class HunterAgent : EnemyController
 {
-	private void Update()
+	protected override void Update()
 	{
+		base.Update();
 		// Keep the reference values updates here.
 		UpdateBlackboard();
 

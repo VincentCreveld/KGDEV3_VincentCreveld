@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Pathfinding))]
 public class EnemyController : GameEntity, IDamagable, IHealable
@@ -14,6 +15,8 @@ public class EnemyController : GameEntity, IDamagable, IHealable
 	protected Blackboard blackboard;
 
 	protected SelectorNode behaviourTree;
+
+	public Text hp;
 
 	public float maxHealth = Blackboard.ENEMY_MAX_HEALTH;
 	protected float currentHealth;
@@ -42,6 +45,11 @@ public class EnemyController : GameEntity, IDamagable, IHealable
 	protected virtual void UpdateBlackboard()
 	{
 
+	}
+
+	protected virtual void Update()
+	{
+		hp.text = "HP: " + (int)currentHealth;
 	}
 
 	protected virtual void SetupBT() { }
