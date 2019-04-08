@@ -10,7 +10,7 @@ public class BTLeaf_SetTargetPlayer : BaseNode
 	public BTLeaf_SetTargetPlayer(Blackboard bb)
 	{
 		blackboard = bb;
-		blackboard.SetValueOnBlackboard(Blackboard.CURRENT_TARGET, bb.GetCurrentPlayer().GetPos());
+		blackboard.SetValueOnBlackboard(Blackboard.CURRENT_PATHFINDING_TARGET, bb.GetCurrentPlayer().GetPos());
 	}
 
 	// Update func
@@ -19,7 +19,7 @@ public class BTLeaf_SetTargetPlayer : BaseNode
 		if(blackboard.GetCurrentPlayer() == null)
 			return BTNodeState.failure;
 
-		blackboard.SetValueOnBlackboard(Blackboard.CURRENT_TARGET, blackboard.GetCurrentPlayer().GetPos());
+		blackboard.SetValueOnBlackboard(Blackboard.CURRENT_PATHFINDING_TARGET, blackboard.GetCurrentPlayer().GetPos());
 
 		return BTNodeState.success;
 	}

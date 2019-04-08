@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-	public GridInfo grid;
+	public LevelManager levelManager;
 
 	public Transform startPos, targetPos;
 
@@ -19,8 +19,8 @@ public class Pathfinding : MonoBehaviour
 	// Access function for agent.
 	public void FindPath(Vector3 startPos, Vector3 targetPos)
 	{
-		Node startNode = grid.GetNodeFromWorldPos(startPos);
-		Node targetNode = grid.GetNodeFromWorldPos(targetPos);
+		Node startNode = levelManager.GetNodeFromWorldPos(startPos);
+		Node targetNode = levelManager.GetNodeFromWorldPos(targetPos + new Vector3(0.5f,0,0.5f));
 
 		List<Node> openNodes = new List<Node>();
 		HashSet<Node> closedList = new HashSet<Node>();
@@ -48,7 +48,7 @@ public class Pathfinding : MonoBehaviour
 				break;
 			}
 
-			foreach(Node neighbor in grid.GetNeighbors(curNode))
+			foreach(Node neighbor in levelManager.GetNeighbors(curNode))
 			{
 				// If node is wall or already checked, skip iteration
 				if(!neighbor.isWall || closedList.Contains(neighbor))
@@ -79,15 +79,32 @@ public class Pathfinding : MonoBehaviour
 		int closestNo = 0;
 		float closestDist = 10000000f;
 
-		for(int i = 0; i < grid.roomCenters.Count; i++)
+		for(int i = 0; i < levelManager.roomCenters.Count; i++)
 		{
-			if(Vector3.Distance(pos, grid.roomCenters[i]) < closestDist)
+			if(Vector3.Distance(pos, levelManager.roomCenters[i]) < closestDist)
 			{
-				closestDist = Vector3.Distance(pos, grid.roomCenters[i]);
+				closestDist = Vector3.Distance(pos, levelManager.roomCenters[i]);
 				closestNo = i;
 			}
 		}
 		return closestNo;
+	}
+
+	public Vector3 GetClosestHealthpack(Vector3 pos)
+	{
+		float closestDist = 10000000f;
+
+		Vector3 closestPack = pos;
+
+		for(int i = 0; i < levelManager.healthpacks.Count; i++)
+		{
+			if(Vector3.Distance(pos, levelManager.healthpacks[i].GetPos()) < closestDist)
+			{
+				closestDist = Vector3.Distance(pos, levelManager.healthpacks[i].GetPos());
+				closestPack = levelManager.healthpacks[i].GetPos();
+			}
+		}
+		return closestPack;
 	}
 
 	public int GetFurthestRoom(Vector3 pos)
@@ -95,11 +112,11 @@ public class Pathfinding : MonoBehaviour
 		int furthestNo = 0;
 		float furthestDist = 0f;
 
-		for(int i = 0; i < grid.roomCenters.Count; i++)
+		for(int i = 0; i < levelManager.roomCenters.Count; i++)
 		{
-			if(Vector3.Distance(pos, grid.roomCenters[i]) > furthestDist)
+			if(Vector3.Distance(pos, levelManager.roomCenters[i]) > furthestDist)
 			{
-				furthestDist = Vector3.Distance(pos, grid.roomCenters[i]);
+				furthestDist = Vector3.Distance(pos, levelManager.roomCenters[i]);
 				furthestNo = i;
 			}
 		}
@@ -108,10 +125,10 @@ public class Pathfinding : MonoBehaviour
 
 	public Vector3 GetRoomCenter(int i)
 	{
-		if(i < grid.roomCenters.Count)
-			return grid.roomCenters[i];
+		if(i < levelManager.roomCenters.Count)
+			return levelManager.roomCenters[i];
 		else
-			return grid.roomCenters[0];
+			return levelManager.roomCenters[0];
 	}
 
 	private void GetFinalPath(Node startNode, Node targetNode)
@@ -128,7 +145,7 @@ public class Pathfinding : MonoBehaviour
 		finalPath.Reverse();
 
 		// For gizmo purposes
-		grid.finalPath = finalPath;
+		levelManager.finalPath = finalPath;
 
 		path = finalPath;
 	}

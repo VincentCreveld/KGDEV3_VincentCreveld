@@ -26,13 +26,18 @@ public class Blackboard
 	public static string MOVESPEED = "e_speed";
 	public static float E_MOVESPEED = .1f;
 	public static string DAMAGE = "e_dmg";
-	public static float E_DAMAGE = 10f;
+	public static float E_DAMAGE = 25f;
+
+	public static string HEALTHPACK_LOCATIONS = "hp_locations";
 
 	public static string OWN_ENEMY_OBJECT = "e_object";
 
-	public static string CURRENT_TARGET = "e_curTarget";
+	public static string CURRENT_PATHFINDING_TARGET = "e_curTarget";
 
-	public static string CURRENT_PATROL_NODE = "e_curPatrolNode";
+	public static string ENEMY_ATTACK_TARGET = "e_attackTarget";
+
+	public static string ENEMY_PATROL_NODES = "e_patrolNodes";
+	public static string CURRENT_PATROL_TARGET = "e_patrolTarget";
 
 	private Dictionary<string, object> blackboard;
 

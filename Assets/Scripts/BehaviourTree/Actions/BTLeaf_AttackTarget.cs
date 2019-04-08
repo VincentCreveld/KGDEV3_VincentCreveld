@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BTLeaf_AttackPlayer : BaseNode
+public class BTLeaf_AttackTarget : BaseNode
 {
 	private Blackboard blackboard;
 
-	public BTLeaf_AttackPlayer(Blackboard bb)
+	public BTLeaf_AttackTarget(Blackboard bb)
 	{
 		blackboard = bb;
 
@@ -15,7 +15,7 @@ public class BTLeaf_AttackPlayer : BaseNode
 
 	public override BTNodeState Evaluate()
 	{
-		blackboard.GetCurrentPlayer().DealDamage(blackboard.GetObjectFromBlackBoard<float>(Blackboard.DAMAGE));
+		blackboard.GetObjectFromBlackBoard<IDamagable>(Blackboard.ENEMY_ATTACK_TARGET).DealDamage(blackboard.GetObjectFromBlackBoard<float>(Blackboard.DAMAGE));
 
 		return BTNodeState.success;
 	}

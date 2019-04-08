@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BTLeaf_SetPathfindingTarget : BaseNode
+public class BTLeaf_SetMovementToPatrolTarget : BaseNode
 {
 	private Blackboard blackboard;
 
-	public BTLeaf_SetPathfindingTarget(Blackboard bb)
+	public BTLeaf_SetMovementToPatrolTarget(Blackboard bb)
 	{
 		blackboard = bb;
 	}
@@ -22,7 +22,7 @@ public class BTLeaf_SetPathfindingTarget : BaseNode
 		blackboard.GetObjectFromBlackBoard<Pathfinding>(Blackboard.PATHFINDING_COMP).
 			FindPath(
 			blackboard.GetCurrentAgent().GetPos(),
-			blackboard.GetObjectFromBlackBoard<Vector3>(Blackboard.CURRENT_PATHFINDING_TARGET)
+			blackboard.GetObjectFromBlackBoard<Vector3>(Blackboard.CURRENT_PATROL_TARGET)
 			);
 
 		blackboard.path = blackboard.GetObjectFromBlackBoard<Pathfinding>(Blackboard.PATHFINDING_COMP).GetPath();

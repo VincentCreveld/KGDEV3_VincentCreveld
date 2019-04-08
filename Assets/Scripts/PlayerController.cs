@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public interface IDamagable
 {
 	void DealDamage(float val);
 }
 
-public class PlayerController : MonoBehaviour, IDamagable
+public class PlayerController : GameEntity, IDamagable, IHealable
 {
 	public float damageCooldown = 1f;
 	private bool isDamagable = true;
@@ -25,6 +26,10 @@ public class PlayerController : MonoBehaviour, IDamagable
 		set
 		{
 			currentHealth = value;
+
+			if(currentHealth >= maxHealth)
+				currentHealth = maxHealth;
+
 			if(currentHealth <= 0)
 				Die();
 		}
@@ -48,7 +53,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 		}
 		if(Input.GetMouseButtonDown(0))
 		{
-			Debug.Log("Here");
 			RaycastHit hit;
 			Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 5, Color.red, 0f);
 			Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -57,6 +61,9 @@ public class PlayerController : MonoBehaviour, IDamagable
 				Debug.Log(hit.transform.name);
 				if(hit.transform.GetComponent<IDamagable>() != null)
 					hit.transform.GetComponent<IDamagable>().DealDamage(10f);
+				
+				if(hit.transform.GetComponentInParent<Healthpack>() != null)
+					hit.transform.GetComponentInParent<Healthpack>().HealTarget(this);
 			}
 		}
 	}
@@ -70,6 +77,11 @@ public class PlayerController : MonoBehaviour, IDamagable
 		}
 	}
 
+	public void Heal(float val)
+	{
+		CurrentHealth += val;
+	}
+
 	// Hacky cooldown mechanic so i don't have to track damage cooldowns on individual enemies.
 	private IEnumerator DmgCooldown()
 	{
@@ -78,12 +90,14 @@ public class PlayerController : MonoBehaviour, IDamagable
 		isDamagable = true;
 	}
 
+	// Reload scene on death
 	private void Die()
 	{
 		Debug.LogError("Game over!");
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
-	public Vector3 GetPos()
+	public override Vector3 GetPos()
 	{
 		return transform.position;
 	}

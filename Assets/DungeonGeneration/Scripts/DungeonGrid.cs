@@ -32,8 +32,7 @@ public class DungeonGrid : MonoBehaviour
 	[SerializeField]
 	private List<Room> roomList = new List<Room>();
 
-	public GameObject room, path, wall, door, player, doubleDoor;
-
+	public GameObject room, path, wall, player;
 	public const int DUNGEON_SIZE = 64;
 	private Tile[,] dungeonGrid;
 	private GameObject[,] doors;
@@ -405,8 +404,6 @@ public class DungeonGrid : MonoBehaviour
 			{
 				if(dungeonGrid[i, j] == Tile.room || dungeonGrid[i, j] == Tile.path)
 					GenerateWall(i, j);
-				//if(dungeonGrid[i, j] == Tile.path)
-				//	GenerateDoor(i, j);
 			}
 		}
 	}
@@ -457,63 +454,6 @@ public class DungeonGrid : MonoBehaviour
 		{
 			PlaceWall(TileRotation.up, x, y);
 		}
-	}
-
-	private void GenerateDoor(int x, int y)
-	{
-
-		for(int i = x - 1; i < x + 1; i++)
-		{
-			for(int j = y - 1; j < y + 1; j++)
-			{
-				if(x == i || y == j)
-					continue;
-
-			}
-		}
-
-		if(x - 1 >= 0)
-		{
-			if(dungeonGrid[x - 1, y] == Tile.room)
-			{
-				PlaceDoor(TileRotation.left, x, y);
-			}
-		}
-
-		if(x + 1 < DUNGEON_SIZE)
-		{
-			if(dungeonGrid[x + 1, y] == Tile.room)
-			{
-				PlaceDoor(TileRotation.right, x, y);
-			}
-		}
-
-		if(y - 1 >= 0)
-		{
-			if(dungeonGrid[x, y - 1] == Tile.room)
-			{
-				PlaceDoor(TileRotation.down, x, y);
-			}
-		}
-
-		if(y + 1 < DUNGEON_SIZE)
-		{
-			if(dungeonGrid[x, y + 1] == Tile.room)
-			{
-				PlaceDoor(TileRotation.up, x, y);
-			}
-		}
-
-	}
-
-	private void PlaceDoor(TileRotation t, int x, int y)
-	{
-		doors[x, y] = Instantiate(door, new Vector3(x, 0, y), Quaternion.Euler(new Vector3(0, (int)t, 0)), transform);
-	}
-
-	private void PlaceDoubleDoor(TileRotation t, int x, int y)
-	{
-		doors[x, y] = Instantiate(doubleDoor, new Vector3(x, 0, y), Quaternion.Euler(new Vector3(0, (int)t, 0)), transform);
 	}
 
 	private void PlaceWall(TileRotation t, int x, int y)
